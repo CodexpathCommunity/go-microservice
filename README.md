@@ -54,5 +54,4 @@ A simple microservice written in Go.
 - [ ] Authentication (JWT / OAuth)
 - [ ] Message Broker (RabbitMQ / Kafka)
 - [ ] OpenTracing (Jaeger)
-- [ ] Service Registry (Consul)
 - [ ] Centralized Configuration (Consul)
