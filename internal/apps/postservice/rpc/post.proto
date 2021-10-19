@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package posts;
+option go_package = "internal/apps/postservice/rpc";
+
+import "google/protobuf/timestamp.proto";
+
+service Posts {
+    // GetPosts returns a list of posts
+    rpc GetPosts(GetPostsRequest) returns (GetPostsResponse) {}
+
+    // GetPost returns a single post
+    rpc GetPost(GetPostRequest) returns (GetPostResponse) {}
+
+    // CreatePost creates a new post
+    rpc CreatePost(CreatePostRequest) returns (CreatePostResponse) {}
+
+    // UpdatePost updates a post
+    rpc UpdatePost(UpdatePostRequest) returns (UpdatePostResponse) {}
+
+    // DeletePost deletes a post
+    rpc DeletePost(DeletePostRequest) returns (DeletePostResponse) {}
+}
+
+// GetPostsRequest is the request for GetPosts rpc method
+message GetPostsRequest {
+    int32 limit = 1;    // limit is the number of posts to return
+    string cursor = 2; // cursor is the pagination cursor
+}
+
+// GetPostRequest is the request for GetPost rpc method
+message GetPostRequest {
+    string id = 1; // id is the id of the post to return
+}
+
+// CreatePostRequest is the request for CreatePost rpc method
+message CreatePostRequest {
+    string author_id = 1;
+    string title = 2; // title is the title of the post
+    string content = 3; // content is the content of the post
+}
+
+// UpdatePostRequest is the request for UpdatePost rpc method
+message UpdatePostRequest {
+    string id = 1; // id is the id of the post to update
+    string title = 2; // title is the title of the post
+    string content = 3; // content is the content of the post
+}
+
+// DeletePostRequest is the request for DeletePost rpc method
+message DeletePostRequest {
+    string id = 1; // id is the id of the post to delete
+}
+
+// GetPostsResponse is the response for GetPosts rpc method
+message GetPostsResponse {
+    repeated Post posts = 1; // posts is the list of posts
+}
+
+// GetPostResponse is the response for GetPost rpc method
+message GetPostResponse {
+    Post post = 1; // post is the post
+}
+
+// CreatePostResponse is the response for CreatePost rpc method
+message CreatePostResponse {
+    Post post = 1; // post is the post
+}
+
+// UpdatePostResponse is the response for UpdatePost rpc method
+message UpdatePostResponse {
+    Post post = 1; // post is the post
+}
+
+// DeletePostResponse is the response for DeletePost rpc method
+message DeletePostResponse {
+    bool success = 1; // success is true if the post was deleted successfully
+}
+
+// Post defines a post
+message Post {
+    string id = 1; // id is the id of the post
+    string author_id = 2; // author_id is the id of the author
+    string title = 3; // title is the title of the post
+    string content = 4; // content is the content of the post
+    google.protobuf.Timestamp created_at = 5; // created_at is the time the post was created
+    google.protobuf.Timestamp updated_at = 6; // updated_at is the time the post was updated
+}

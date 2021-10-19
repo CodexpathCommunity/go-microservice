@@ -1,0 +1,13 @@
+app:
+  addr: 0.0.0.0:8080
+
+redis:
+  addr: host.docker.internal:6379
+  password:
+  db: 0
+  write_timeout: 0
+  read_timeout: 0
+
+database:
+  driver: postgres
+  dsn: "postgres://postgres:postgres@host.docker.internal:5432/post?sslmode=disable"

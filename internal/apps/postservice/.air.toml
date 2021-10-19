@@ -1,0 +1,19 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+bin = ".tmp/postservice"
+cmd = "go build -ldflags=\"-s -w\" -o ./.tmp/postservice/app cmd/postservice/main.go"
+delay = 1000
+full_bin = "./.tmp/postservice/app --config ./internal/apps/postservice/config.development.yml --env development"
+
+log = "air_errors.log"
+
+exclude_dir = [".tmp", "node_modules", "web"]
+include_ext = ["go", "mod", "yaml", "env"]
+
+[log]
+time = true
+
+[misc]
+clean_on_exit = true

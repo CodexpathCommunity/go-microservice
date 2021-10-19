@@ -1,0 +1,66 @@
+version: "3.8"
+
+volumes:
+  post-service-data:
+
+networks:
+  post-service-network:
+    driver: bridge
+
+services:
+  # Post microservice postgresql database
+  post-service-database:
+    image: postgres:14.0
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: post
+    volumes:
+      - post-service-data:/var/lib/postgresql/data
+    networks:
+      - post-service-network
+    ports:
+      - "5432:5432"
+
+  # Post microservice redis database
+  post-service-redis:
+    image: redis:6.0
+    networks:
+      - post-service-network
+    ports:
+      - "6379:6379"
+
+  # Post microservice rest api server
+  post-service-api:
+    build:
+      context: .
+      dockerfile: ./internal/apps/postservice/Dockerfile
+    volumes:
+      - .:/usr/src/postservice
+    networks:
+      - post-service-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - post-service-database
+      - post-service-redis
+
+  # Post microservice migration
+  post-service-migration:
+    image: migrate/migrate
+    restart: on-failure
+    command:
+      [
+        "-path",
+        "migrations",
+        "-database",
+        "postgres://postgres:postgres@post-service-database:5432/post?sslmode=disable",
+        "up",
+      ]
+    volumes:
+      - ./internal/apps/postservice/db/migrations/:/migrations
+    networks:
+      - post-service-network
+    depends_on:
+      - post-service-database
+      - post-service-redis
