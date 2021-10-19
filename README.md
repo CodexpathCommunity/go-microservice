@@ -43,3 +43,16 @@ A simple microservice written in Go.
 ├── scripts
 └── web
 ```
+
+## To Do
+
+- [ ] Microservices (Currently in progress)
+  - [ ] Authentication Service
+  - [ ] Post Service
+  - [ ] User Service
+- [ ] API Gateway (Kong / Tyk)
+- [ ] Authentication (JWT / OAuth)
+- [ ] Message Broker (RabbitMQ / Kafka)
+- [ ] OpenTracing (Jaeger)
+- [ ] Service Registry (Consul)
+- [ ] Centralized Configuration (Consul)
