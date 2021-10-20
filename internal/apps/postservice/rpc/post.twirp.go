@@ -28,11 +28,11 @@ import url "net/url"
 // See https://twitchtv.github.io/twirp/docs/version_matrix.html
 const _ = twirp.TwirpPackageMinVersion_8_1_0
 
-// ===============
-// Posts Interface
-// ===============
+// =====================
+// PostService Interface
+// =====================
 
-type Posts interface {
+type PostService interface {
 	// GetPosts returns a list of posts
 	GetPosts(context.Context, *GetPostsRequest) (*GetPostsResponse, error)
 
@@ -49,20 +49,20 @@ type Posts interface {
 	DeletePost(context.Context, *DeletePostRequest) (*DeletePostResponse, error)
 }
 
-// =====================
-// Posts Protobuf Client
-// =====================
+// ===========================
+// PostService Protobuf Client
+// ===========================
 
-type postsProtobufClient struct {
+type postServiceProtobufClient struct {
 	client      HTTPClient
 	urls        [5]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
 
-// NewPostsProtobufClient creates a Protobuf client that implements the Posts interface.
+// NewPostServiceProtobufClient creates a Protobuf client that implements the PostService interface.
 // It communicates using Protobuf and can be configured with a custom HTTPClient.
-func NewPostsProtobufClient(baseURL string, client HTTPClient, opts ...twirp.ClientOption) Posts {
+func NewPostServiceProtobufClient(baseURL string, client HTTPClient, opts ...twirp.ClientOption) PostService {
 	if c, ok := client.(*http.Client); ok {
 		client = withoutRedirects(c)
 	}
@@ -82,7 +82,7 @@ func NewPostsProtobufClient(baseURL string, client HTTPClient, opts ...twirp.Cli
 
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
-	serviceURL += baseServicePath(pathPrefix, "posts", "Posts")
+	serviceURL += baseServicePath(pathPrefix, "post", "PostService")
 	urls := [5]string{
 		serviceURL + "GetPosts",
 		serviceURL + "GetPost",
@@ -91,7 +91,7 @@ func NewPostsProtobufClient(baseURL string, client HTTPClient, opts ...twirp.Cli
 		serviceURL + "DeletePost",
 	}
 
-	return &postsProtobufClient{
+	return &postServiceProtobufClient{
 		client:      client,
 		urls:        urls,
 		interceptor: twirp.ChainInterceptors(clientOpts.Interceptors...),
@@ -99,9 +99,9 @@ func NewPostsProtobufClient(baseURL string, client HTTPClient, opts ...twirp.Cli
 	}
 }
 
-func (c *postsProtobufClient) GetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceProtobufClient) GetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "GetPosts")
 	caller := c.callGetPosts
 	if c.interceptor != nil {
@@ -128,7 +128,7 @@ func (c *postsProtobufClient) GetPosts(ctx context.Context, in *GetPostsRequest)
 	return caller(ctx, in)
 }
 
-func (c *postsProtobufClient) callGetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
+func (c *postServiceProtobufClient) callGetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
 	out := new(GetPostsResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
 	if err != nil {
@@ -145,9 +145,9 @@ func (c *postsProtobufClient) callGetPosts(ctx context.Context, in *GetPostsRequ
 	return out, nil
 }
 
-func (c *postsProtobufClient) GetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceProtobufClient) GetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "GetPost")
 	caller := c.callGetPost
 	if c.interceptor != nil {
@@ -174,7 +174,7 @@ func (c *postsProtobufClient) GetPost(ctx context.Context, in *GetPostRequest) (
 	return caller(ctx, in)
 }
 
-func (c *postsProtobufClient) callGetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
+func (c *postServiceProtobufClient) callGetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
 	out := new(GetPostResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
@@ -191,9 +191,9 @@ func (c *postsProtobufClient) callGetPost(ctx context.Context, in *GetPostReques
 	return out, nil
 }
 
-func (c *postsProtobufClient) CreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceProtobufClient) CreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "CreatePost")
 	caller := c.callCreatePost
 	if c.interceptor != nil {
@@ -220,7 +220,7 @@ func (c *postsProtobufClient) CreatePost(ctx context.Context, in *CreatePostRequ
 	return caller(ctx, in)
 }
 
-func (c *postsProtobufClient) callCreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
+func (c *postServiceProtobufClient) callCreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
 	out := new(CreatePostResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
 	if err != nil {
@@ -237,9 +237,9 @@ func (c *postsProtobufClient) callCreatePost(ctx context.Context, in *CreatePost
 	return out, nil
 }
 
-func (c *postsProtobufClient) UpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceProtobufClient) UpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "UpdatePost")
 	caller := c.callUpdatePost
 	if c.interceptor != nil {
@@ -266,7 +266,7 @@ func (c *postsProtobufClient) UpdatePost(ctx context.Context, in *UpdatePostRequ
 	return caller(ctx, in)
 }
 
-func (c *postsProtobufClient) callUpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
+func (c *postServiceProtobufClient) callUpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
 	out := new(UpdatePostResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
 	if err != nil {
@@ -283,9 +283,9 @@ func (c *postsProtobufClient) callUpdatePost(ctx context.Context, in *UpdatePost
 	return out, nil
 }
 
-func (c *postsProtobufClient) DeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceProtobufClient) DeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "DeletePost")
 	caller := c.callDeletePost
 	if c.interceptor != nil {
@@ -312,7 +312,7 @@ func (c *postsProtobufClient) DeletePost(ctx context.Context, in *DeletePostRequ
 	return caller(ctx, in)
 }
 
-func (c *postsProtobufClient) callDeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
+func (c *postServiceProtobufClient) callDeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
 	out := new(DeletePostResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
 	if err != nil {
@@ -329,20 +329,20 @@ func (c *postsProtobufClient) callDeletePost(ctx context.Context, in *DeletePost
 	return out, nil
 }
 
-// =================
-// Posts JSON Client
-// =================
+// =======================
+// PostService JSON Client
+// =======================
 
-type postsJSONClient struct {
+type postServiceJSONClient struct {
 	client      HTTPClient
 	urls        [5]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
 
-// NewPostsJSONClient creates a JSON client that implements the Posts interface.
+// NewPostServiceJSONClient creates a JSON client that implements the PostService interface.
 // It communicates using JSON and can be configured with a custom HTTPClient.
-func NewPostsJSONClient(baseURL string, client HTTPClient, opts ...twirp.ClientOption) Posts {
+func NewPostServiceJSONClient(baseURL string, client HTTPClient, opts ...twirp.ClientOption) PostService {
 	if c, ok := client.(*http.Client); ok {
 		client = withoutRedirects(c)
 	}
@@ -362,7 +362,7 @@ func NewPostsJSONClient(baseURL string, client HTTPClient, opts ...twirp.ClientO
 
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
-	serviceURL += baseServicePath(pathPrefix, "posts", "Posts")
+	serviceURL += baseServicePath(pathPrefix, "post", "PostService")
 	urls := [5]string{
 		serviceURL + "GetPosts",
 		serviceURL + "GetPost",
@@ -371,7 +371,7 @@ func NewPostsJSONClient(baseURL string, client HTTPClient, opts ...twirp.ClientO
 		serviceURL + "DeletePost",
 	}
 
-	return &postsJSONClient{
+	return &postServiceJSONClient{
 		client:      client,
 		urls:        urls,
 		interceptor: twirp.ChainInterceptors(clientOpts.Interceptors...),
@@ -379,9 +379,9 @@ func NewPostsJSONClient(baseURL string, client HTTPClient, opts ...twirp.ClientO
 	}
 }
 
-func (c *postsJSONClient) GetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceJSONClient) GetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "GetPosts")
 	caller := c.callGetPosts
 	if c.interceptor != nil {
@@ -408,7 +408,7 @@ func (c *postsJSONClient) GetPosts(ctx context.Context, in *GetPostsRequest) (*G
 	return caller(ctx, in)
 }
 
-func (c *postsJSONClient) callGetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
+func (c *postServiceJSONClient) callGetPosts(ctx context.Context, in *GetPostsRequest) (*GetPostsResponse, error) {
 	out := new(GetPostsResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
 	if err != nil {
@@ -425,9 +425,9 @@ func (c *postsJSONClient) callGetPosts(ctx context.Context, in *GetPostsRequest)
 	return out, nil
 }
 
-func (c *postsJSONClient) GetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceJSONClient) GetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "GetPost")
 	caller := c.callGetPost
 	if c.interceptor != nil {
@@ -454,7 +454,7 @@ func (c *postsJSONClient) GetPost(ctx context.Context, in *GetPostRequest) (*Get
 	return caller(ctx, in)
 }
 
-func (c *postsJSONClient) callGetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
+func (c *postServiceJSONClient) callGetPost(ctx context.Context, in *GetPostRequest) (*GetPostResponse, error) {
 	out := new(GetPostResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
@@ -471,9 +471,9 @@ func (c *postsJSONClient) callGetPost(ctx context.Context, in *GetPostRequest) (
 	return out, nil
 }
 
-func (c *postsJSONClient) CreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceJSONClient) CreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "CreatePost")
 	caller := c.callCreatePost
 	if c.interceptor != nil {
@@ -500,7 +500,7 @@ func (c *postsJSONClient) CreatePost(ctx context.Context, in *CreatePostRequest)
 	return caller(ctx, in)
 }
 
-func (c *postsJSONClient) callCreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
+func (c *postServiceJSONClient) callCreatePost(ctx context.Context, in *CreatePostRequest) (*CreatePostResponse, error) {
 	out := new(CreatePostResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
 	if err != nil {
@@ -517,9 +517,9 @@ func (c *postsJSONClient) callCreatePost(ctx context.Context, in *CreatePostRequ
 	return out, nil
 }
 
-func (c *postsJSONClient) UpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceJSONClient) UpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "UpdatePost")
 	caller := c.callUpdatePost
 	if c.interceptor != nil {
@@ -546,7 +546,7 @@ func (c *postsJSONClient) UpdatePost(ctx context.Context, in *UpdatePostRequest)
 	return caller(ctx, in)
 }
 
-func (c *postsJSONClient) callUpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
+func (c *postServiceJSONClient) callUpdatePost(ctx context.Context, in *UpdatePostRequest) (*UpdatePostResponse, error) {
 	out := new(UpdatePostResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
 	if err != nil {
@@ -563,9 +563,9 @@ func (c *postsJSONClient) callUpdatePost(ctx context.Context, in *UpdatePostRequ
 	return out, nil
 }
 
-func (c *postsJSONClient) DeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+func (c *postServiceJSONClient) DeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithMethodName(ctx, "DeletePost")
 	caller := c.callDeletePost
 	if c.interceptor != nil {
@@ -592,7 +592,7 @@ func (c *postsJSONClient) DeletePost(ctx context.Context, in *DeletePostRequest)
 	return caller(ctx, in)
 }
 
-func (c *postsJSONClient) callDeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
+func (c *postServiceJSONClient) callDeletePost(ctx context.Context, in *DeletePostRequest) (*DeletePostResponse, error) {
 	out := new(DeletePostResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
 	if err != nil {
@@ -609,12 +609,12 @@ func (c *postsJSONClient) callDeletePost(ctx context.Context, in *DeletePostRequ
 	return out, nil
 }
 
-// ====================
-// Posts Server Handler
-// ====================
+// ==========================
+// PostService Server Handler
+// ==========================
 
-type postsServer struct {
-	Posts
+type postServiceServer struct {
+	PostService
 	interceptor      twirp.Interceptor
 	hooks            *twirp.ServerHooks
 	pathPrefix       string // prefix for routing
@@ -622,10 +622,10 @@ type postsServer struct {
 	jsonCamelCase    bool   // JSON fields are serialized as lowerCamelCase rather than keeping the original proto names
 }
 
-// NewPostsServer builds a TwirpServer that can be used as an http.Handler to handle
+// NewPostServiceServer builds a TwirpServer that can be used as an http.Handler to handle
 // HTTP requests that are routed to the right method in the provided svc implementation.
 // The opts are twirp.ServerOption modifiers, for example twirp.WithServerHooks(hooks).
-func NewPostsServer(svc Posts, opts ...interface{}) TwirpServer {
+func NewPostServiceServer(svc PostService, opts ...interface{}) TwirpServer {
 	serverOpts := newServerOpts(opts)
 
 	// Using ReadOpt allows backwards and forwads compatibility with new options in the future
@@ -638,8 +638,8 @@ func NewPostsServer(svc Posts, opts ...interface{}) TwirpServer {
 		pathPrefix = "/twirp" // default prefix
 	}
 
-	return &postsServer{
-		Posts:            svc,
+	return &postServiceServer{
+		PostService:      svc,
 		hooks:            serverOpts.Hooks,
 		interceptor:      twirp.ChainInterceptors(serverOpts.Interceptors...),
 		pathPrefix:       pathPrefix,
@@ -650,12 +650,12 @@ func NewPostsServer(svc Posts, opts ...interface{}) TwirpServer {
 
 // writeError writes an HTTP response with a valid Twirp error format, and triggers hooks.
 // If err is not a twirp.Error, it will get wrapped with twirp.InternalErrorWith(err)
-func (s *postsServer) writeError(ctx context.Context, resp http.ResponseWriter, err error) {
+func (s *postServiceServer) writeError(ctx context.Context, resp http.ResponseWriter, err error) {
 	writeError(ctx, resp, err, s.hooks)
 }
 
 // handleRequestBodyError is used to handle error when the twirp server cannot read request
-func (s *postsServer) handleRequestBodyError(ctx context.Context, resp http.ResponseWriter, msg string, err error) {
+func (s *postServiceServer) handleRequestBodyError(ctx context.Context, resp http.ResponseWriter, msg string, err error) {
 	if context.Canceled == ctx.Err() {
 		s.writeError(ctx, resp, twirp.NewError(twirp.Canceled, "failed to read request: context canceled"))
 		return
@@ -667,16 +667,16 @@ func (s *postsServer) handleRequestBodyError(ctx context.Context, resp http.Resp
 	s.writeError(ctx, resp, twirp.WrapError(malformedRequestError(msg), err))
 }
 
-// PostsPathPrefix is a convenience constant that may identify URL paths.
+// PostServicePathPrefix is a convenience constant that may identify URL paths.
 // Should be used with caution, it only matches routes generated by Twirp Go clients,
 // with the default "/twirp" prefix and default CamelCase service and method names.
 // More info: https://twitchtv.github.io/twirp/docs/routing.html
-const PostsPathPrefix = "/twirp/posts.Posts/"
+const PostServicePathPrefix = "/twirp/post.PostService/"
 
-func (s *postsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
-	ctx = ctxsetters.WithPackageName(ctx, "posts")
-	ctx = ctxsetters.WithServiceName(ctx, "Posts")
+	ctx = ctxsetters.WithPackageName(ctx, "post")
+	ctx = ctxsetters.WithServiceName(ctx, "PostService")
 	ctx = ctxsetters.WithResponseWriter(ctx, resp)
 
 	var err error
@@ -694,7 +694,7 @@ func (s *postsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 	// Verify path format: [<prefix>]/<package>.<Service>/<Method>
 	prefix, pkgService, method := parseTwirpPath(req.URL.Path)
-	if pkgService != "posts.Posts" {
+	if pkgService != "post.PostService" {
 		msg := fmt.Sprintf("no handler for path %q", req.URL.Path)
 		s.writeError(ctx, resp, badRouteError(msg, req.Method, req.URL.Path))
 		return
@@ -728,7 +728,7 @@ func (s *postsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (s *postsServer) serveGetPosts(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveGetPosts(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -746,7 +746,7 @@ func (s *postsServer) serveGetPosts(ctx context.Context, resp http.ResponseWrite
 	}
 }
 
-func (s *postsServer) serveGetPostsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveGetPostsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "GetPosts")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -768,7 +768,7 @@ func (s *postsServer) serveGetPostsJSON(ctx context.Context, resp http.ResponseW
 		return
 	}
 
-	handler := s.Posts.GetPosts
+	handler := s.PostService.GetPosts
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *GetPostsRequest) (*GetPostsResponse, error) {
 			resp, err := s.interceptor(
@@ -777,7 +777,7 @@ func (s *postsServer) serveGetPostsJSON(ctx context.Context, resp http.ResponseW
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*GetPostsRequest) when calling interceptor")
 					}
-					return s.Posts.GetPosts(ctx, typedReq)
+					return s.PostService.GetPosts(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -829,7 +829,7 @@ func (s *postsServer) serveGetPostsJSON(ctx context.Context, resp http.ResponseW
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveGetPostsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveGetPostsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "GetPosts")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -849,7 +849,7 @@ func (s *postsServer) serveGetPostsProtobuf(ctx context.Context, resp http.Respo
 		return
 	}
 
-	handler := s.Posts.GetPosts
+	handler := s.PostService.GetPosts
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *GetPostsRequest) (*GetPostsResponse, error) {
 			resp, err := s.interceptor(
@@ -858,7 +858,7 @@ func (s *postsServer) serveGetPostsProtobuf(ctx context.Context, resp http.Respo
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*GetPostsRequest) when calling interceptor")
 					}
-					return s.Posts.GetPosts(ctx, typedReq)
+					return s.PostService.GetPosts(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -908,7 +908,7 @@ func (s *postsServer) serveGetPostsProtobuf(ctx context.Context, resp http.Respo
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveGetPost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveGetPost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -926,7 +926,7 @@ func (s *postsServer) serveGetPost(ctx context.Context, resp http.ResponseWriter
 	}
 }
 
-func (s *postsServer) serveGetPostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveGetPostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "GetPost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -948,7 +948,7 @@ func (s *postsServer) serveGetPostJSON(ctx context.Context, resp http.ResponseWr
 		return
 	}
 
-	handler := s.Posts.GetPost
+	handler := s.PostService.GetPost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *GetPostRequest) (*GetPostResponse, error) {
 			resp, err := s.interceptor(
@@ -957,7 +957,7 @@ func (s *postsServer) serveGetPostJSON(ctx context.Context, resp http.ResponseWr
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*GetPostRequest) when calling interceptor")
 					}
-					return s.Posts.GetPost(ctx, typedReq)
+					return s.PostService.GetPost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1009,7 +1009,7 @@ func (s *postsServer) serveGetPostJSON(ctx context.Context, resp http.ResponseWr
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveGetPostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveGetPostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "GetPost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1029,7 +1029,7 @@ func (s *postsServer) serveGetPostProtobuf(ctx context.Context, resp http.Respon
 		return
 	}
 
-	handler := s.Posts.GetPost
+	handler := s.PostService.GetPost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *GetPostRequest) (*GetPostResponse, error) {
 			resp, err := s.interceptor(
@@ -1038,7 +1038,7 @@ func (s *postsServer) serveGetPostProtobuf(ctx context.Context, resp http.Respon
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*GetPostRequest) when calling interceptor")
 					}
-					return s.Posts.GetPost(ctx, typedReq)
+					return s.PostService.GetPost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1088,7 +1088,7 @@ func (s *postsServer) serveGetPostProtobuf(ctx context.Context, resp http.Respon
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveCreatePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveCreatePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -1106,7 +1106,7 @@ func (s *postsServer) serveCreatePost(ctx context.Context, resp http.ResponseWri
 	}
 }
 
-func (s *postsServer) serveCreatePostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveCreatePostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "CreatePost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1128,7 +1128,7 @@ func (s *postsServer) serveCreatePostJSON(ctx context.Context, resp http.Respons
 		return
 	}
 
-	handler := s.Posts.CreatePost
+	handler := s.PostService.CreatePost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
 			resp, err := s.interceptor(
@@ -1137,7 +1137,7 @@ func (s *postsServer) serveCreatePostJSON(ctx context.Context, resp http.Respons
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*CreatePostRequest) when calling interceptor")
 					}
-					return s.Posts.CreatePost(ctx, typedReq)
+					return s.PostService.CreatePost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1189,7 +1189,7 @@ func (s *postsServer) serveCreatePostJSON(ctx context.Context, resp http.Respons
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveCreatePostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveCreatePostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "CreatePost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1209,7 +1209,7 @@ func (s *postsServer) serveCreatePostProtobuf(ctx context.Context, resp http.Res
 		return
 	}
 
-	handler := s.Posts.CreatePost
+	handler := s.PostService.CreatePost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
 			resp, err := s.interceptor(
@@ -1218,7 +1218,7 @@ func (s *postsServer) serveCreatePostProtobuf(ctx context.Context, resp http.Res
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*CreatePostRequest) when calling interceptor")
 					}
-					return s.Posts.CreatePost(ctx, typedReq)
+					return s.PostService.CreatePost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1268,7 +1268,7 @@ func (s *postsServer) serveCreatePostProtobuf(ctx context.Context, resp http.Res
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveUpdatePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveUpdatePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -1286,7 +1286,7 @@ func (s *postsServer) serveUpdatePost(ctx context.Context, resp http.ResponseWri
 	}
 }
 
-func (s *postsServer) serveUpdatePostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveUpdatePostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "UpdatePost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1308,7 +1308,7 @@ func (s *postsServer) serveUpdatePostJSON(ctx context.Context, resp http.Respons
 		return
 	}
 
-	handler := s.Posts.UpdatePost
+	handler := s.PostService.UpdatePost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *UpdatePostRequest) (*UpdatePostResponse, error) {
 			resp, err := s.interceptor(
@@ -1317,7 +1317,7 @@ func (s *postsServer) serveUpdatePostJSON(ctx context.Context, resp http.Respons
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*UpdatePostRequest) when calling interceptor")
 					}
-					return s.Posts.UpdatePost(ctx, typedReq)
+					return s.PostService.UpdatePost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1369,7 +1369,7 @@ func (s *postsServer) serveUpdatePostJSON(ctx context.Context, resp http.Respons
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveUpdatePostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveUpdatePostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "UpdatePost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1389,7 +1389,7 @@ func (s *postsServer) serveUpdatePostProtobuf(ctx context.Context, resp http.Res
 		return
 	}
 
-	handler := s.Posts.UpdatePost
+	handler := s.PostService.UpdatePost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *UpdatePostRequest) (*UpdatePostResponse, error) {
 			resp, err := s.interceptor(
@@ -1398,7 +1398,7 @@ func (s *postsServer) serveUpdatePostProtobuf(ctx context.Context, resp http.Res
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*UpdatePostRequest) when calling interceptor")
 					}
-					return s.Posts.UpdatePost(ctx, typedReq)
+					return s.PostService.UpdatePost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1448,7 +1448,7 @@ func (s *postsServer) serveUpdatePostProtobuf(ctx context.Context, resp http.Res
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveDeletePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveDeletePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -1466,7 +1466,7 @@ func (s *postsServer) serveDeletePost(ctx context.Context, resp http.ResponseWri
 	}
 }
 
-func (s *postsServer) serveDeletePostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveDeletePostJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "DeletePost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1488,7 +1488,7 @@ func (s *postsServer) serveDeletePostJSON(ctx context.Context, resp http.Respons
 		return
 	}
 
-	handler := s.Posts.DeletePost
+	handler := s.PostService.DeletePost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *DeletePostRequest) (*DeletePostResponse, error) {
 			resp, err := s.interceptor(
@@ -1497,7 +1497,7 @@ func (s *postsServer) serveDeletePostJSON(ctx context.Context, resp http.Respons
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*DeletePostRequest) when calling interceptor")
 					}
-					return s.Posts.DeletePost(ctx, typedReq)
+					return s.PostService.DeletePost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1549,7 +1549,7 @@ func (s *postsServer) serveDeletePostJSON(ctx context.Context, resp http.Respons
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) serveDeletePostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *postServiceServer) serveDeletePostProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
 	ctx = ctxsetters.WithMethodName(ctx, "DeletePost")
 	ctx, err = callRequestRouted(ctx, s.hooks)
@@ -1569,7 +1569,7 @@ func (s *postsServer) serveDeletePostProtobuf(ctx context.Context, resp http.Res
 		return
 	}
 
-	handler := s.Posts.DeletePost
+	handler := s.PostService.DeletePost
 	if s.interceptor != nil {
 		handler = func(ctx context.Context, req *DeletePostRequest) (*DeletePostResponse, error) {
 			resp, err := s.interceptor(
@@ -1578,7 +1578,7 @@ func (s *postsServer) serveDeletePostProtobuf(ctx context.Context, resp http.Res
 					if !ok {
 						return nil, twirp.InternalError("failed type assertion req.(*DeletePostRequest) when calling interceptor")
 					}
-					return s.Posts.DeletePost(ctx, typedReq)
+					return s.PostService.DeletePost(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
@@ -1628,19 +1628,19 @@ func (s *postsServer) serveDeletePostProtobuf(ctx context.Context, resp http.Res
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *postsServer) ServiceDescriptor() ([]byte, int) {
+func (s *postServiceServer) ServiceDescriptor() ([]byte, int) {
 	return twirpFileDescriptor0, 0
 }
 
-func (s *postsServer) ProtocGenTwirpVersion() string {
+func (s *postServiceServer) ProtocGenTwirpVersion() string {
 	return "v8.1.0"
 }
 
 // PathPrefix returns the base service path, in the form: "/<prefix>/<package>.<Service>/"
 // that is everything in a Twirp route except for the <Method>. This can be used for routing,
 // for example to identify the requests that are targeted to this service in a mux.
-func (s *postsServer) PathPrefix() string {
-	return baseServicePath(s.pathPrefix, "posts", "Posts")
+func (s *postServiceServer) PathPrefix() string {
+	return baseServicePath(s.pathPrefix, "post", "PostService")
 }
 
 // =====
@@ -2212,35 +2212,35 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 475 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0xad, 0x9d, 0x38, 0x1f, 0x53, 0xa9, 0x90, 0x15, 0x04, 0x13, 0x84, 0x12, 0x96, 0x4b, 0x4e,
-	0xb6, 0x14, 0xd4, 0x03, 0x48, 0x08, 0x95, 0x22, 0x21, 0x6e, 0xc8, 0xc0, 0x85, 0x4b, 0x71, 0xed,
-	0xa5, 0x58, 0x72, 0xbc, 0xc6, 0x3b, 0xe6, 0x7f, 0x72, 0xe4, 0xdf, 0xa0, 0xcc, 0xae, 0x37, 0x8e,
-	0x4d, 0x4b, 0x7b, 0x9c, 0x99, 0xf7, 0x9e, 0x37, 0xef, 0xcd, 0x04, 0xd6, 0x59, 0x81, 0xa2, 0x2a,
-	0xe2, 0x3c, 0x8c, 0xcb, 0x52, 0x85, 0xa5, 0x54, 0xa8, 0x44, 0xf5, 0x2b, 0x4b, 0x44, 0x58, 0x95,
-	0x09, 0xd5, 0x41, 0x59, 0x49, 0x94, 0xcc, 0xa3, 0xd9, 0x62, 0x79, 0x25, 0xe5, 0x55, 0x2e, 0x42,
-	0x6a, 0x5e, 0xd6, 0xdf, 0x43, 0xcc, 0xb6, 0x42, 0x61, 0xbc, 0x2d, 0x35, 0x8e, 0xbf, 0x81, 0x7b,
-	0xef, 0x05, 0x7e, 0xdc, 0x81, 0x23, 0xf1, 0xb3, 0x16, 0x0a, 0xd9, 0x03, 0xf0, 0xf2, 0x6c, 0x9b,
-	0xa1, 0xef, 0xac, 0x9c, 0xb5, 0x17, 0xe9, 0x82, 0xcd, 0x61, 0x94, 0xd4, 0x95, 0x92, 0x95, 0xef,
-	0xae, 0x9c, 0xf5, 0x34, 0x32, 0x15, 0x5f, 0xc1, 0x89, 0x11, 0x68, 0xf8, 0x27, 0xe0, 0x66, 0x29,
-	0x91, 0xa7, 0x91, 0x9b, 0xa5, 0xfc, 0x1b, 0xcc, 0xce, 0x2b, 0x11, 0xa3, 0x68, 0x83, 0x9e, 0xc0,
-	0x34, 0xae, 0xf1, 0x87, 0xac, 0x2e, 0x2c, 0x76, 0xa2, 0x1b, 0x1f, 0xd2, 0xdd, 0x0b, 0x30, 0xc3,
-	0x5c, 0x98, 0x4f, 0xe9, 0x82, 0xf9, 0x30, 0x4e, 0x64, 0x81, 0xa2, 0x40, 0x7f, 0x40, 0xfd, 0xa6,
-	0xe4, 0x9f, 0x60, 0xf6, 0xa5, 0x4c, 0x3b, 0x5f, 0xe8, 0x3c, 0xe3, 0xce, 0xa2, 0xcf, 0x61, 0xf6,
-	0x4e, 0xe4, 0xe2, 0x46, 0x51, 0x7e, 0x0a, 0xf7, 0xf7, 0xf6, 0xa9, 0x52, 0x16, 0x4a, 0xb0, 0x67,
-	0xa0, 0xcd, 0xf7, 0x9d, 0xd5, 0x60, 0x7d, 0xbc, 0x39, 0x0e, 0xa8, 0x0a, 0x48, 0x46, 0x4f, 0xf8,
-	0xc6, 0xba, 0x6e, 0x59, 0x4b, 0x18, 0xee, 0x66, 0xa4, 0xdd, 0x21, 0xd1, 0x80, 0x9f, 0x02, 0x6b,
-	0xdb, 0x78, 0x07, 0x5a, 0xdb, 0x9b, 0xdb, 0xd2, 0x02, 0x60, 0xed, 0x5f, 0x6f, 0x68, 0x3e, 0x8c,
-	0x55, 0x9d, 0x24, 0x42, 0x29, 0x62, 0x4e, 0xa2, 0xa6, 0xe4, 0x7f, 0x1c, 0x18, 0xee, 0xa0, 0x3d,
-	0xdb, 0x0f, 0x82, 0x76, 0xaf, 0x0b, 0x7a, 0x70, 0x4d, 0x26, 0xc3, 0x83, 0x4c, 0xd8, 0x4b, 0x80,
-	0x84, 0x3c, 0x48, 0x2f, 0x62, 0xf4, 0x3d, 0x7a, 0xfc, 0x22, 0xd0, 0x3b, 0x1e, 0x34, 0x3b, 0x1e,
-	0x7c, 0x6e, 0x76, 0x3c, 0x9a, 0x1a, 0xf4, 0x19, 0x51, 0x6b, 0xf2, 0x81, 0xa8, 0xa3, 0xff, 0x53,
-	0x0d, 0xfa, 0x0c, 0x37, 0xbf, 0x5d, 0xf0, 0x28, 0x62, 0xf6, 0x1a, 0x26, 0x4d, 0xdc, 0x6c, 0x6e,
-	0x4c, 0xeb, 0x9c, 0xcf, 0xe2, 0x51, 0xaf, 0xaf, 0xcd, 0xe3, 0x47, 0xec, 0x15, 0x8c, 0x4d, 0x97,
-	0x3d, 0x3c, 0x44, 0x35, 0xe4, 0x79, 0xb7, 0x6d, 0xb9, 0xe7, 0x00, 0xfb, 0xf8, 0x99, 0x6f, 0x70,
-	0xbd, 0xc3, 0x5a, 0x3c, 0xfe, 0xc7, 0xa4, 0x2d, 0xb2, 0x5f, 0x06, 0x2b, 0xd2, 0xbb, 0x1d, 0x2b,
-	0xd2, 0xdf, 0x1c, 0x2d, 0xb2, 0x5f, 0x0d, 0x2b, 0xd2, 0xbb, 0x15, 0x2b, 0xd2, 0xdf, 0x23, 0x7e,
-	0xf4, 0x76, 0xf9, 0xf5, 0xe9, 0x8d, 0xff, 0x65, 0x97, 0x23, 0xca, 0xe4, 0xc5, 0xdf, 0x00, 0x00,
-	0x00, 0xff, 0xff, 0x8f, 0x06, 0x0d, 0x72, 0xf3, 0x04, 0x00, 0x00,
+	// 477 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x4d, 0x6f, 0xd4, 0x30,
+	0x10, 0x6d, 0xb2, 0xdf, 0x53, 0xa9, 0xb0, 0x56, 0x5b, 0xa2, 0x45, 0xd0, 0xc8, 0x5c, 0xf6, 0x94,
+	0x88, 0xd2, 0x03, 0x88, 0x03, 0x5a, 0x40, 0x42, 0xdc, 0x50, 0x0a, 0x17, 0x2e, 0x25, 0x4d, 0x4c,
+	0x89, 0x94, 0x8d, 0x83, 0x3d, 0xe1, 0x5f, 0xf2, 0x03, 0xf8, 0x37, 0x28, 0xe3, 0x78, 0x37, 0x1f,
+	0x6a, 0x29, 0xb7, 0x9d, 0xc9, 0x7b, 0xcf, 0xf6, 0x7b, 0x33, 0x0b, 0xeb, 0xac, 0x40, 0xa1, 0x8a,
+	0x38, 0x0f, 0xe3, 0xb2, 0xd4, 0x61, 0x29, 0x35, 0x6a, 0xa1, 0x7e, 0x65, 0x89, 0x08, 0x55, 0x99,
+	0x50, 0x1d, 0x94, 0x4a, 0xa2, 0x64, 0xe3, 0xfa, 0xf7, 0xea, 0xec, 0x46, 0xca, 0x9b, 0x5c, 0x84,
+	0xd4, 0xbb, 0xae, 0xbe, 0x87, 0x98, 0x6d, 0x85, 0xc6, 0x78, 0x5b, 0x1a, 0x18, 0x7f, 0x03, 0x0f,
+	0x3e, 0x08, 0xfc, 0x54, 0xeb, 0x44, 0xe2, 0x67, 0x25, 0x34, 0xb2, 0x63, 0x98, 0xe4, 0xd9, 0x36,
+	0x43, 0xcf, 0xf1, 0x9d, 0xf5, 0x24, 0x32, 0x05, 0x3b, 0x85, 0x69, 0x52, 0x29, 0x2d, 0x95, 0xe7,
+	0xfa, 0xce, 0x7a, 0x11, 0x35, 0x15, 0xf7, 0xe1, 0xa8, 0x11, 0xb0, 0xfc, 0x23, 0x70, 0xb3, 0x94,
+	0xc8, 0x8b, 0xc8, 0xcd, 0x52, 0xfe, 0x0d, 0x96, 0xef, 0x94, 0x88, 0x51, 0xb4, 0x41, 0x8f, 0x61,
+	0x11, 0x57, 0xf8, 0x43, 0xaa, 0xab, 0x1d, 0x76, 0x6e, 0x1a, 0x1f, 0xd3, 0xfa, 0x06, 0x98, 0x61,
+	0x2e, 0x9a, 0xa3, 0x4c, 0xc1, 0x3c, 0x98, 0x25, 0xb2, 0x40, 0x51, 0xa0, 0x37, 0xa2, 0xbe, 0x2d,
+	0xf9, 0x25, 0x2c, 0xbf, 0x94, 0x69, 0xef, 0x84, 0xde, 0x35, 0xfe, 0x5b, 0xf4, 0x19, 0x2c, 0xdf,
+	0x8b, 0x5c, 0xdc, 0x29, 0xca, 0x2f, 0xe0, 0xe1, 0xde, 0x3e, 0x5d, 0xca, 0x42, 0x0b, 0xe6, 0xc3,
+	0x84, 0x72, 0xf1, 0x1c, 0x7f, 0xb4, 0x3e, 0x3c, 0x87, 0x80, 0x52, 0x21, 0x15, 0xf3, 0x81, 0x3f,
+	0xdf, 0x99, 0xbe, 0x23, 0x3d, 0x05, 0x0a, 0x8c, 0xa4, 0xbb, 0x1c, 0xea, 0xf3, 0x0b, 0x60, 0x6d,
+	0x13, 0xef, 0xcf, 0x6a, 0x1b, 0x73, 0x4f, 0x56, 0x00, 0xac, 0xfd, 0xf2, 0x86, 0xe5, 0xc1, 0x4c,
+	0x57, 0x49, 0x22, 0xb4, 0x26, 0xe2, 0x3c, 0xb2, 0x25, 0xff, 0xe3, 0xc0, 0xb8, 0x86, 0x0e, 0x2c,
+	0xef, 0x84, 0xec, 0xde, 0x16, 0xf2, 0xe8, 0x96, 0x3c, 0xc6, 0x9d, 0x3c, 0xd8, 0x2b, 0x80, 0x84,
+	0x1c, 0x48, 0xaf, 0x62, 0xf4, 0x26, 0x74, 0xf7, 0x55, 0x60, 0xe6, 0x3b, 0xb0, 0xf3, 0x1d, 0x7c,
+	0xb6, 0xf3, 0x1d, 0x2d, 0x1a, 0xf4, 0x86, 0xa8, 0x15, 0xd9, 0x40, 0xd4, 0xe9, 0xbf, 0xa9, 0x0d,
+	0x7a, 0x83, 0xe7, 0xbf, 0x5d, 0x38, 0xac, 0xdf, 0x76, 0x69, 0xb6, 0x8c, 0xbd, 0x86, 0xb9, 0x0d,
+	0x9c, 0x9d, 0x18, 0xe7, 0x7a, 0xfb, 0xb3, 0x3a, 0xed, 0xb7, 0x8d, 0x81, 0xfc, 0x80, 0xbd, 0x84,
+	0x59, 0xd3, 0x65, 0xc7, 0x1d, 0x90, 0xa5, 0x9e, 0xf4, 0xba, 0x3b, 0xe6, 0x06, 0x60, 0x1f, 0x3f,
+	0x7b, 0x64, 0x60, 0x83, 0xad, 0x5a, 0x79, 0xc3, 0x0f, 0x6d, 0x89, 0xfd, 0x2c, 0x58, 0x89, 0xc1,
+	0xda, 0x58, 0x89, 0xe1, 0xd8, 0x18, 0x89, 0xfd, 0x60, 0x58, 0x89, 0xc1, 0x92, 0x58, 0x89, 0xe1,
+	0x0c, 0xf1, 0x83, 0xb7, 0x67, 0x5f, 0x9f, 0xdc, 0xf9, 0x17, 0x76, 0x3d, 0xa5, 0x3c, 0x5e, 0xfc,
+	0x0d, 0x00, 0x00, 0xff, 0xff, 0xe5, 0x6b, 0xac, 0x1d, 0xea, 0x04, 0x00, 0x00,
 }

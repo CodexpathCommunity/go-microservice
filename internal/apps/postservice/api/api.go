@@ -12,7 +12,7 @@ import (
 // NewServer returns a new post service http multiplexer.
 func NewServer(b service.Service) http.Handler {
 	mux := chi.NewMux()
-	handler := rpc.NewPostsServer(NewHandler(b), twirp.WithServerPathPrefix("/v1"))
+	handler := rpc.NewPostServiceServer(NewHandler(b), twirp.WithServerPathPrefix("/v1"))
 
 	mux.Mount(handler.PathPrefix(), handler)
 
@@ -24,7 +24,7 @@ type handler struct {
 }
 
 // NewHandler returns a new handler with the Posts interface.
-func NewHandler(service service.Service) rpc.Posts {
+func NewHandler(service service.Service) rpc.PostService {
 	return &handler{
 		service: service,
 	}

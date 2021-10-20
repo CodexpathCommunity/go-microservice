@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package posts;
+package post;
 option go_package = "internal/apps/postservice/rpc";
 
 import "google/protobuf/timestamp.proto";
 
-service Posts {
+service PostService {
     // GetPosts returns a list of posts
     rpc GetPosts(GetPostsRequest) returns (GetPostsResponse) {}
 
