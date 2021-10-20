@@ -5,6 +5,7 @@ option go_package = "internal/apps/postservice/rpc";
 
 import "google/protobuf/timestamp.proto";
 
+// PostService is the service that handles all post related requests.
 service PostService {
     // GetPosts returns a list of posts
     rpc GetPosts(GetPostsRequest) returns (GetPostsResponse) {}
